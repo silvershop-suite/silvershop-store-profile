@@ -8,7 +8,9 @@ use SilverShop\AddressFormats\AddressFormatRegistry;
 use SilverShop\AddressFormats\AddressFormatter;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
+use SilverStripe\Core\Convert;
 use SilverStripe\Core\Extension;
+use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\FieldList;
@@ -105,6 +107,36 @@ class StoreProfileExtension extends Extension
         return (string) ($this->getOwner()->ShopName
             ?: $this->getOwner()->LegalName
             ?: $this->getOwner()->Title);
+    }
+
+    /**
+     * The brand block for the shared notification-email header: the shop logo as an absolute-URL <img> when a
+     * Logo is set, otherwise the shop name in the standard brand span. Returned as HTML so an email template can
+     * render it directly ($SiteConfig.ShopEmailBrand); where store-profile is not installed the email templates
+     * fall back to their own plain shop-name / site-title brand.
+     */
+    public function ShopEmailBrand(): DBHTMLText
+    {
+        $html = DBHTMLText::create();
+        $name = $this->StoreProfileName();
+        $logo = $this->getOwner()->Logo();
+
+        if ($logo && $logo->exists()) {
+            $resized = $logo->ScaleWidth(220);
+            $src = ($resized && $resized->exists()) ? $resized->getAbsoluteURL() : $logo->getAbsoluteURL();
+            $html->setValue(sprintf(
+                '<img class="silvershop-email__logo" src="%s" alt="%s" '
+                . 'style="display:block;border:0;max-width:220px;height:auto;margin:0 0 14px;" />',
+                Convert::raw2att((string) $src),
+                Convert::raw2att($name)
+            ));
+
+            return $html;
+        }
+
+        $html->setValue(sprintf('<span class="silvershop-email__brand">%s</span>', Convert::raw2xml($name)));
+
+        return $html;
     }
 
     public function hasStoreAddress(): bool

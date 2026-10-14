@@ -46,4 +46,23 @@ class StoreProfileTest extends SapphireTest
         $config->write();
         $this->assertFalse($config->hasStoreAddress());
     }
+
+    public function testEmailBrandFallsBackToNameSpanWithoutLogo(): void
+    {
+        $config = SiteConfig::create(['Title' => 'My Shop', 'ShopName' => 'Silvershop']);
+        $config->write();
+
+        $brand = (string) $config->ShopEmailBrand();
+        $this->assertStringContainsString('silvershop-email__brand', $brand);
+        $this->assertStringContainsString('Silvershop', $brand);
+        $this->assertStringNotContainsString('<img', $brand);
+    }
+
+    public function testEmailBrandEscapesName(): void
+    {
+        $config = SiteConfig::create(['ShopName' => 'Tom & Jerry']);
+        $config->write();
+
+        $this->assertStringContainsString('Tom &amp; Jerry', (string) $config->ShopEmailBrand());
+    }
 }
