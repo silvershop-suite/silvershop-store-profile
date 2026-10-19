@@ -6,7 +6,12 @@
     "keywords": ["silverstripe", "silvershop", "siteconfig", "store", "address"],
     "authors": [
         {
-            "name": "RVXD"
+            "name": "Remy Vaartjes",
+            "email": "remy@xd.nl",
+            "role": "Lead developer"
+        },
+        {
+            "name": "SilverShop-Suite Contributors"
         }
     ],
     "repositories": [
