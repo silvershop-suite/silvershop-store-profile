@@ -13,7 +13,7 @@ rolled its own seller/sender identity and they diverged. This module makes it a 
   **Settings → Shop**:
   - Identity: `ShopName`, `LegalName`, `VatNumber`, `ContactEmail`, `ContactPhone`, and a `Logo` (Image).
   - Structured store address: street, line 2, postcode, city, region, ISO country — with **labels and
-    formatting from [silvershop/address-formats](https://github.com/RVXD/silvershop-address-formats)** (the
+    formatting from [silvershop-suite/address-formats](https://github.com/RVXD/silvershop-address-formats)** (the
     region field auto-hides for countries that don't use one).
 - Accessors for consumers: `StoreProfileName()` (ShopName → LegalName → site title), `hasStoreAddress()`,
   `StoreAddressData()` (generic array), `StoreFormattedAddress($html)`.
@@ -27,11 +27,11 @@ standalone. Nothing hard-requires store-profile.
 ## Installation
 
 ```bash
-composer require silvershop/store-profile
+composer require silvershop-suite/store-profile
 ```
 
 Then run `dev/build` and fill in **Settings → Shop → Store profile**. Requires
-[silvershop/address-formats](https://github.com/RVXD/silvershop-address-formats) (installed automatically).
+[silvershop-suite/address-formats](https://github.com/RVXD/silvershop-address-formats) (installed automatically).
 
 ## Status
 
